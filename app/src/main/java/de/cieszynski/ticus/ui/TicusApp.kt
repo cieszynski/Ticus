@@ -12,7 +12,10 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -24,6 +27,10 @@ import de.cieszynski.ticus.ui.theme.TicusTheme
 fun TicusApp(windowSizeClass: WindowSizeClass) {
     TicusTheme {
         val isCompact = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
+        val navigationItem =
+            listOf(NavigationItem.Home, NavigationItem.Menu)//, MainSection.Favorite, MainSection.Chat, MainSection.Profile)
+
+        val selectedIndex = rememberSaveable { mutableStateOf(0) }
 
         Scaffold(
             topBar = {
@@ -52,18 +59,14 @@ fun TicusApp(windowSizeClass: WindowSizeClass) {
             bottomBar = {
                 if (isCompact) {
                     NavigationBar {
-                        NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    Icons.Filled.Favorite,
-                                    contentDescription = null
-                                )
-                            },
-                            label = { Text("item") },
-                            selected = true, // selectedItem == index,
-                            onClick = { /*selectedItem = index*/ }
-                        )
-
+                        navigationItem.forEachIndexed { index, item ->
+                            NavigationBarItem(
+                                icon = { Icon(imageVector = item.icon, contentDescription = "") },
+                                label = { Text(stringResource(item.label)) },
+                                selected = selectedIndex.value == index,
+                                onClick = { selectedIndex.value = index}
+                            )
+                        }
                     }
                 }
             },
@@ -74,19 +77,16 @@ fun TicusApp(windowSizeClass: WindowSizeClass) {
                         .fillMaxSize()
                         .wrapContentSize()
                 ) {
-                    if(!isCompact) {
+                    if (!isCompact) {
                         NavigationRail {
-                            NavigationRailItem(
-                                icon = {
-                                    Icon(
-                                        Icons.Filled.Favorite,
-                                        contentDescription = null
-                                    )
-                                },
-                                label = { Text("item") },
-                                selected = true, // selectedItem == index,
-                                onClick = { /*selectedItem = index*/ }
-                            )
+                            navigationItem.forEachIndexed { index, item ->
+                                NavigationRailItem(
+                                    icon = { Icon(imageVector = item.icon, contentDescription = "") },
+                                    label = { Text(stringResource(item.label)) },
+                                    selected = selectedIndex.value == index,
+                                    onClick = { selectedIndex.value = index}
+                                )
+                            }
                         }
                     }
                     Text(

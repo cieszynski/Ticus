@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val windowSizeClass = calculateWindowSizeClass(this)
 
-            TicusApp(windowSizeClass)
+            TicusApp(windowSizeClass = windowSizeClass)
         }
     }
 }

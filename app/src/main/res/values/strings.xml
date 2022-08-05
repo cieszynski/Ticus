@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Ticus</string>
+    <!-- Navigation -->
+    <string name="label_home">Start</string>
+    <string name="label_menu">Mehr</string>
+
 </resources>
