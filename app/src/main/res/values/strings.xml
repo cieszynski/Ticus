@@ -3,5 +3,6 @@
     <!-- Navigation -->
     <string name="label_home">Start</string>
     <string name="label_menu">Mehr</string>
+    <string name="label_fav">Favoriten</string>
 
 </resources>
