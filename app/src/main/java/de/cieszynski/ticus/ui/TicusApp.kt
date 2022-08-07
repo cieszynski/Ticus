@@ -1,23 +1,61 @@
 package de.cieszynski.ticus.ui
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import de.cieszynski.ticus.ui.components.NavBar
-import de.cieszynski.ticus.ui.components.NavRail
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import de.cieszynski.ticus.ui.more.MoreScreen
 import de.cieszynski.ticus.ui.theme.TicusTheme
+
+sealed class NavRoutes(val route: String) {
+    object Home : NavRoutes("home")
+    object Favorites : NavRoutes("favorites")
+    object More : NavRoutes("more")
+}
+
+@Composable
+fun NavigationHost(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = NavRoutes.Home.route,
+    ) {
+        composable(NavRoutes.Home.route) {
+            Home()
+        }
+
+        composable(NavRoutes.Favorites.route) {
+            Favorites()
+        }
+
+        composable(NavRoutes.More.route) {
+            MoreScreen(isCompact = true)
+        }
+    }
+}
 
 // https://github.com/android/compose-samples/blob/main/JetNews/app/src/main/java/com/example/jetnews/ui/JetnewsApp.kt
 @Composable
@@ -25,35 +63,119 @@ fun TicusApp(windowSizeClass: WindowSizeClass) {
     TicusTheme {
         val isCompact = windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
                 || windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
+        val navController = rememberNavController()
+
+        val backStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = backStackEntry?.destination?.route
 
         val navigationItems =
             listOf(
                 NavigationItem.Home,
                 NavigationItem.Fav,
-                NavigationItem.Menu
+                NavigationItem.More
             )
-
-        val selectedIndex = rememberSaveable { mutableStateOf(0) }
 
         if (isCompact) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize()
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom
             ) {
-                NavPane(selectedIndex = selectedIndex, modifier = Modifier.weight(1f))
-                NavBar(items = navigationItems, selectedIndex = selectedIndex)
-            }
-        } else {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize()
-            ) {
-                NavRail(items = navigationItems, selectedIndex = selectedIndex)
-                NavPane(selectedIndex = selectedIndex, modifier = Modifier.weight(1f))
+                Box(modifier = Modifier.weight(1f)) {
+                    NavigationHost(navController = navController)
+                }
+                NavigationBar {
+                    NavigationBarItem(
+                        icon = { Icon(imageVector = Icons.Outlined.Home, contentDescription = "") },
+                        label = { Text("Home") },
+                        selected = currentRoute == NavRoutes.Home.route,
+                        onClick = {
+                            navController.navigate(NavRoutes.Home.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        })
+                    NavigationBarItem(
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Favorite,
+                                contentDescription = ""
+                            )
+                        },
+                        label = { Text("Favorites") },
+                        selected = currentRoute == NavRoutes.Favorites.route,
+                        onClick = {
+                            navController.navigate(NavRoutes.Favorites.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        })
+                    NavigationBarItem(
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Outlined.MoreVert,
+                                contentDescription = ""
+                            )
+                        },
+                        label = { Text("More") },
+                        selected = currentRoute == NavRoutes.More.route,
+                        onClick = {
+                            navController.navigate(NavRoutes.More.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        })
+                }
             }
         }
+    }
+
+    /*
+    val selectedIndex = rememberSaveable { mutableStateOf(0) }
+
+    if (isCompact) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize()
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize()
+            ) {
+                NavPane(
+                    isCompact = isCompact,
+                    selectedIndex = selectedIndex
+                )
+            }
+            NavBar(items = navigationItems, selectedIndex = selectedIndex)
+        }
+    } else {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize()
+        ) {
+            NavRail(items = navigationItems, selectedIndex = selectedIndex)
+            Box(modifier = Modifier
+                .weight(1f)
+                .fillMaxSize()) {
+                NavPane(
+                    isCompact = isCompact,
+                    selectedIndex = selectedIndex
+                )
+            }
+        }
+    }*/
 /*
         Scaffold(
             topBar = {
@@ -119,7 +241,16 @@ fun TicusApp(windowSizeClass: WindowSizeClass) {
                     )
                 }
             })*/
-    }
+}
+
+@Composable
+fun Home() {
+    Text("Home 2")
+}
+
+@Composable
+fun Favorites() {
+    Text("Favorites 2")
 }
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
