@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Ticus</string>
     <!-- Navigation -->
-    <string name="label_home">Start</string>
+    <string name="label_home">Home</string>
     <string name="label_more">Mehr</string>
-    <string name="label_fav">Favoriten</string>
+    <string name="label_favorites">Favoriten</string>
 
 </resources>
