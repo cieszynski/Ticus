@@ -30,7 +30,7 @@ fun TicusApp(windowSizeClass: WindowSizeClass) {
                 verticalArrangement = Arrangement.Bottom
             ) {
                 Box(modifier = Modifier.weight(1f)) {
-                    NavHostMain(navController = navController)
+                    NavHostMain(navController = navController, isCompact = isCompact)
                 }
                 NavBar(navController = navController)
             }
@@ -41,7 +41,7 @@ fun TicusApp(windowSizeClass: WindowSizeClass) {
             ) {
                 NavRail(navController = navController)
                 Box(modifier = Modifier.weight(1f)) {
-                    NavHostMain(navController = navController)
+                    NavHostMain(navController = navController, isCompact = isCompact)
                 }
             }
         }

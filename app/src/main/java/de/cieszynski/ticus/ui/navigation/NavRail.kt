@@ -35,7 +35,7 @@ fun NavRail(
 
             navigationItems.forEach { navItem ->
                 NavigationRailItem(
-                    icon = { Icon(imageVector = navItem.icon, contentDescription = "") },
+                    icon = { navItem.icon?.let { Icon(imageVector = it, contentDescription = "") } },
                     label = { Text(stringResource(navItem.label)) },
                     selected = currentRoute == navItem.route,
                     onClick = {

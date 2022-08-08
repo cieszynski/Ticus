@@ -20,7 +20,7 @@ fun NavBar(navController: NavHostController) {
 
         navigationItems.forEach { navItem ->
             NavigationBarItem(
-                icon = { Icon(imageVector = navItem.icon, contentDescription = "") },
+                icon = { navItem.icon?.let { Icon(imageVector = it, contentDescription = "") } },
                 label = { Text(stringResource(navItem.label)) },
                 selected = currentRoute == navItem.route,
                 onClick = {

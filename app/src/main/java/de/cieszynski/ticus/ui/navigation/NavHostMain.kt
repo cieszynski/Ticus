@@ -9,7 +9,7 @@ import de.cieszynski.ticus.ui.Home
 import de.cieszynski.ticus.ui.more.MoreScreen
 
 @Composable
-fun NavHostMain(navController: NavHostController) {
+fun NavHostMain(navController: NavHostController, isCompact: Boolean) {
     NavHost(
         navController = navController,
         startDestination = NavItem.Home.route,
@@ -23,7 +23,7 @@ fun NavHostMain(navController: NavHostController) {
         }
 
         composable(NavItem.More.route) {
-            MoreScreen(isCompact = true)
+            MoreScreen(isCompact = isCompact)
         }
     }
 }
