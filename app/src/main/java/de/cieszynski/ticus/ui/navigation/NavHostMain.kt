@@ -5,7 +5,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import de.cieszynski.ticus.ui.Favorites
-import de.cieszynski.ticus.ui.Home
 import de.cieszynski.ticus.ui.more.MoreScreen
 
 @Composable
@@ -15,7 +14,7 @@ fun NavHostMain(navController: NavHostController, isCompact: Boolean) {
         startDestination = NavItem.Home.route,
     ) {
         composable(NavItem.Home.route) {
-            Home()
+            NavHostHome(isCompact = isCompact)
         }
 
         composable(NavItem.Favorites.route) {

@@ -16,6 +16,9 @@ sealed class NavItem(
     object Home : NavItem("home", R.string.label_home, Icons.Outlined.Home)
     object Favorites : NavItem("favorites", R.string.label_favorites, Icons.Outlined.Favorite)
     object More : NavItem("more", R.string.label_more, Icons.Outlined.MoreVert)
+    // Home
+    object HomeRoute : NavItem("home-route", R.string.label_more)
+
     // More
     object MoreHome : NavItem("morehome", R.string.label_more)
     object MoreImprint : NavItem("moreimprint", R.string.label_more)
