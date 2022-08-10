@@ -12,13 +12,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import de.cieszynski.ticus.TicusApplication
+import de.cieszynski.ticus.data.AppContainer
 import de.cieszynski.ticus.ui.navigation.NavBar
 import de.cieszynski.ticus.ui.navigation.NavHostMain
 import de.cieszynski.ticus.ui.navigation.NavRail
 import de.cieszynski.ticus.ui.theme.TicusTheme
 
 @Composable
-fun TicusApp(windowSizeClass: WindowSizeClass) {
+fun TicusApp(
+    appContainer: AppContainer,
+    windowSizeClass: WindowSizeClass
+) {
     TicusTheme {
         val isCompact = windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
                 || windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
@@ -30,7 +35,11 @@ fun TicusApp(windowSizeClass: WindowSizeClass) {
                 verticalArrangement = Arrangement.Bottom
             ) {
                 Box(modifier = Modifier.weight(1f)) {
-                    NavHostMain(navController = navController, isCompact = isCompact)
+                    NavHostMain(
+                        appContainer = appContainer,
+                        navController = navController,
+                        isCompact = isCompact
+                    )
                 }
                 NavBar(navController = navController)
             }
@@ -41,7 +50,11 @@ fun TicusApp(windowSizeClass: WindowSizeClass) {
             ) {
                 NavRail(navController = navController)
                 Box(modifier = Modifier.weight(1f)) {
-                    NavHostMain(navController = navController, isCompact = isCompact)
+                    NavHostMain(
+                        appContainer = appContainer,
+                        navController = navController,
+                        isCompact = isCompact
+                    )
                 }
             }
         }
@@ -58,12 +71,14 @@ fun Favorites() {
     Text("Favorites 2")
 }
 
+/*
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun DefaultPreview() {
-    //CompactScreen { Text(text = "OK2")}
+    val appContainer = (application as TicusApplication).container
     TicusApp(
+        appContainer = appContainer,
         windowSizeClass = WindowSizeClass.calculateFromSize(
             size = DpSize(
                 width = 360.dp,
@@ -115,3 +130,4 @@ fun ExpandedPreview() {
         )
     )
 }
+*/

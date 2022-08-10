@@ -4,6 +4,7 @@
     package="de.cieszynski.ticus">
 
     <application
+        android:name=".TicusApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,11 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ticus"
         tools:targetApi="31">
+        <!-- adjustResize ensures that the main window resizes to make room for the soft keyboard-->
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Ticus">
+            android:theme="@style/Theme.Ticus"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
